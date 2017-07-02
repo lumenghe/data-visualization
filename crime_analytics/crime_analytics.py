@@ -38,3 +38,27 @@ from descartes import PolygonPatch
 Data readers. Convert to a unified format to apply generic tools
 created below for data analysis
 """
+def parse_csv_seattle(normalize=True):
+    print("Reading Seattle CSV...")
+    df = pd.read_csv("seattle_incidents_summer_2014.csv",
+        header = 0,
+        usecols = [2,3,4,5,6,7,8,9,11,12,14,15],
+        na_values = ["X"],
+        parse_dates = [5,6,7],
+        infer_datetime_format = True,
+        dtype = { "Offense Code":str,
+                  "Offense Code Extension":str,
+                  "Offense Type":str,
+                  "Summary Offense Code":str,
+                  "Summarized Offense Description":str,
+                  "Date Reported":str,
+                  "Occurred Date or Date Range Start":str,
+                  "Occurred Date Range End":str,
+                  "District/Sector":str,
+                  "Zone/Beat":str,
+                  "Longitude":np.float32,
+                  "Latitude":np.float32 })
+    if normalize:
+        df = df[["Summarized Offense Description", "Occurred Date or Date Range Start", "Longitude", "Latitude", "Date Reported", "Occurred Date Range End"]]
+        df.columns = ["Cat", "Time", "X", "Y", "TimeRep", "TimeEnd"]
+    return df
