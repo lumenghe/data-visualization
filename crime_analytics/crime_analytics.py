@@ -62,3 +62,35 @@ def parse_csv_seattle(normalize=True):
         df = df[["Summarized Offense Description", "Occurred Date or Date Range Start", "Longitude", "Latitude", "Date Reported", "Occurred Date Range End"]]
         df.columns = ["Cat", "Time", "X", "Y", "TimeRep", "TimeEnd"]
     return df
+
+def parse_csv_sanfrancisco(normalize=True, remove_non_criminal=False):
+    print("Reading San Franciso CSV")
+    df = pd.read_csv("sanfrancisco_incidents_summer_2014.csv",
+        header = 0,
+        usecols = [1,2,3,4,5,6,7,9,10],
+        parse_dates = [3,4],
+        infer_datetime_format = True,
+        dtype={ "Category":str,
+                "Offense Code":str,
+                "Descript":str,
+                "DayofWeek":str,
+                "Date":str,
+                "Time":str,
+                "PdDistrit":str,
+                "Resolution":str,
+                "X": np.float32,
+                "Y": np.float32})
+    if normalize:
+        def merge_timedate(r):
+            d = r["Date"]
+            return r["Time"].replace(year=d.year, month=d.month, day=d.day)
+        df["Time"] = df.apply(merge_timedate, axis=1)
+        df = df[["Category", "Time", "X", "Y", "Resolution"]]
+        df.columns = ["Cat", "Time", "X", "Y", "Res"]
+    if remove_non_criminal:
+        df = df.loc[df["Cat"] != "NON-CRIMINAL"]
+    return df
+
+
+"""
+Map utils
