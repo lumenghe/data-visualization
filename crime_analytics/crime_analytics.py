@@ -94,3 +94,4 @@ def parse_csv_sanfrancisco(normalize=True, remove_non_criminal=False):
 
 """
 Map utils
+"""
