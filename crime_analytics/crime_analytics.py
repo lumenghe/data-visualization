@@ -95,3 +95,5 @@ def parse_csv_sanfrancisco(normalize=True, remove_non_criminal=False):
 """
 Map utils
 """
+def count_points_in_polygon(polygon, points):
+    return len(filter(prep(polygon).contains, points))
