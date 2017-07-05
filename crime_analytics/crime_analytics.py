@@ -97,3 +97,9 @@ Map utils
 """
 def count_points_in_polygon(polygon, points):
     return len(filter(prep(polygon).contains, points))
+
+def self_categorize(entry, breaks):
+    for i in range(len(breaks)-1):
+        if entry > breaks[i] and entry <= breaks[i+1]:
+            return i
+    return -1
