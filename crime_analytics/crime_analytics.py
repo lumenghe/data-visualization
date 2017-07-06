@@ -114,3 +114,13 @@ def scale_on_map(cmap, ncolors, labels, **kwargs):
     colorbar.set_ticklabels(range(0, ncolors))
     colorbar.set_ticklabels(labels)
     return colorbar
+
+def int_with_commas(x):
+    if x < 0:
+        return '-' + intWithCommas(-x)
+    result = ''
+    while x >= 1000:
+        x, r = divmod(x, 1000)
+        result = ",%03d%s" % (r, result)
+    return "%d%s" % (x, result)
+
