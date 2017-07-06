@@ -103,3 +103,14 @@ def self_categorize(entry, breaks):
         if entry > breaks[i] and entry <= breaks[i+1]:
             return i
     return -1
+
+def scale_on_map(cmap, ncolors, labels, **kwargs):
+    norm = BoundaryNorm(range(0, ncolors), cmap.N)
+    mappable = ScalarMappable(cmap=cmap, norm=norm)
+    mappable.set_array([])
+    mappable.set_clim(-0.5, ncolors+0.5)
+    colorbar = plt.colorbar(mappable, **kwargs)
+    colorbar.set_ticks(np.linspace(0, ncolors, ncolors+1)+0.5)
+    colorbar.set_ticklabels(range(0, ncolors))
+    colorbar.set_ticklabels(labels)
+    return colorbar
