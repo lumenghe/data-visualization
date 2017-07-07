@@ -194,3 +194,6 @@ def map_neighborhood(df, city, output_file, output_title):
     fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
     plt.savefig(output_file, dpi=100, frameon=False, bbox_inches='tight', pad_inches=0.5, facecolor='#F2F2F2')
 
+
+_astral = Astral() # outside of function to speed up computation
+_astral.solar_depression = 'civil'
