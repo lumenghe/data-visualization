@@ -197,3 +197,22 @@ def map_neighborhood(df, city, output_file, output_title):
 
 _astral = Astral() # outside of function to speed up computation
 _astral.solar_depression = 'civil'
+def is_at_night(ts, city):
+    """ determine if time is 30 min after sunset or 30 before sunset.
+    The term 'night time' is defined like this in Common Law.
+    """
+    if city == "seattle":
+        city = "Seattle"
+    elif city == "sanfrancisco":
+        city = "San Francisco"
+    else:
+        raise ValueError("unsupported city '{}'".format(city))
+    cityinfo = _astral[city]
+    dt = ts.to_pydatetime()
+    sun = cityinfo.sun(date=dt, local=True)
+    sunrise = sun['sunrise']
+    sunset = sun['sunset']
+    sunrise = sunrise.replace(tzinfo=None)
+    sunset = sunset.replace(tzinfo=None)
+    return ((sunrise - dt).total_seconds() >= 1800 or (dt - sunset).total_seconds() >= 1800)
+
