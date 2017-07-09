@@ -225,3 +225,23 @@ def cat_overview(df):
     print(sod_counts)
     return sod_counts
 
+
+def cat_pie_display(df, show_cat, output_file, output_title):
+    """
+    Creates a pie chart to show category distribution
+    """
+    print("Creating pie chart ({})".format(output_file))
+    sod_counts = df["Cat"].value_counts()
+    labels = list(sod_counts.index[:show_cat])
+    sizes = list(sod_counts.values[:show_cat])
+    explode = [0.1 for i in range(show_cat)]
+    if show_cat < len(sod_counts):
+        labels += ["OTHER"]
+        sizes += [sum(sod_counts.values[show_cat:])]
+        explode += [0.1]
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, explode=explode, autopct='%1.1f%%', shadow=True, startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
+    plt.savefig(output_file)
+
