@@ -267,3 +267,25 @@ def curve_by_weekday(dfs, output_file, output_title):
     ax.legend()
     fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
     plt.savefig(output_file)
+
+def curve_by_hour(dfs, output_file, output_title):
+    """
+    Plots counts by time of the day
+    """
+    print("Creating hourly plot ({})".format(output_file))
+    ret = dict(zip(dfs.keys(), [[0 for x in range(24)] for i in range(len(dfs))]))
+    for name, df in dfs.iteritems():
+        for _, row in df.iterrows():
+            ret[name][row["Time"].hour] += 1
+    fig, ax = plt.subplots()
+    style = ["r--", "b--", "g--", "c--", "m--", "y--", "k--"]
+    if len(dfs) > len(style):
+        raise ValueError("not enough colors to display curves")
+    for name, st in zip(dfs.keys(), style):
+        ax.plot([x for x in range(24)], ret[name], st, marker="o", label=name)
+    ax.set_xticklabels(["20:00", "0:00", "5:00", "10:00", "15:00", "20:00", "1:00"])
+    plt.ylabel('Counts')
+    plt.xlabel('Hour')
+    ax.legend()
+    fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
+    plt.savefig(output_file)
