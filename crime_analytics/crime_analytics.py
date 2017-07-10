@@ -289,3 +289,10 @@ def curve_by_hour(dfs, output_file, output_title):
     ax.legend()
     fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
     plt.savefig(output_file)
+
+def filter_day(df, city):
+    """
+    Get rows corresponding to day time
+    """
+    print("Selecting day entries...")
+    return df.loc[df["Time"].apply(lambda ts: not is_at_night(ts, city))]
