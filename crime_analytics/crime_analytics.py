@@ -245,3 +245,25 @@ def cat_pie_display(df, show_cat, output_file, output_title):
     fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
     plt.savefig(output_file)
 
+
+def curve_by_weekday(dfs, output_file, output_title):
+    """
+    Plots counts by day of the week, per category
+    dfs is a dictionary of data frames
+    """
+    print("Creating weekdays plot ({})".format(output_file))
+    ret = dict(zip(dfs.keys(), [[0 for x in range(7)] for i in range(len(dfs))]))
+    for name, df in dfs.iteritems():
+        for _, row in df.iterrows():
+            ret[name][row["Time"].dayofweek] += 1
+    fig, ax = plt.subplots()
+    style = ["r--", "b--", "g--", "c--", "m--", "y--", "k--"]
+    if len(dfs) > len(style):
+        raise ValueError("not enough colors to display curves")
+    for name, st in zip(dfs.keys(), style):
+        ax.plot([x for x in range(7)], ret[name], st, marker="o", label=name)
+    ax.set_xticklabels(["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"])
+    plt.ylabel('Counts')
+    ax.legend()
+    fig.suptitle(output_title, fontdict={'size':24, 'fontweight':'bold'}, y=0.92)
+    plt.savefig(output_file)
