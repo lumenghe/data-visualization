@@ -296,3 +296,10 @@ def filter_day(df, city):
     """
     print("Selecting day entries...")
     return df.loc[df["Time"].apply(lambda ts: not is_at_night(ts, city))]
+
+def filter_night(df, city):
+    """
+    Get rows corresponding to night time
+    """
+    print("Selecting night entries...")
+    return df.loc[df["Time"].apply(lambda ts: is_at_night(ts, city))]
