@@ -303,3 +303,10 @@ def filter_night(df, city):
     """
     print("Selecting night entries...")
     return df.loc[df["Time"].apply(lambda ts: is_at_night(ts, city))]
+
+def filter_cat(df, cat):
+    """
+    Filter dataframe on a category
+    """
+    return df.loc[df["Cat"] == cat]
+
