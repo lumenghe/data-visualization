@@ -310,3 +310,51 @@ def filter_cat(df, cat):
     """
     return df.loc[df["Cat"] == cat]
 
+
+if __name__ == "__main__":
+    """
+    Generate a number of figures for data analysis, see report for comments
+    """
+    # SEATTLE
+    df = parse_csv_seattle()
+    # Overview
+    map_neighborhood(df, "seattle", "seattle_overview.png", "Crimes Reported in Seattle by Neighborhood")
+    cat_pie_display(df, 7, "seattle_cat.png", "Crimes in Seattle by Category")
+    # Day
+    df_day = filter_day(df, "seattle")
+    map_neighborhood(df_day, "seattle", "seattle_day.png", "Day Crimes in Seattle by Neighborhood")
+    cat_pie_display(df_day, 7, "seattle_cat_day.png", "Day Crimes in Seattle by Category")
+    # Night
+    df_night = filter_night(df, "seattle")
+    map_neighborhood(df_night, "seattle", "seattle_night.png", "Night Crimes in Seattle by Neighborhood")
+    cat_pie_display(df_night, 7, "seattle_cat_night.png", "Night Crimes in Seattle by Category")
+    # Main day/night cats
+    main_cats = { "CAR PROWL": filter_cat(df, "CAR PROWL"),
+                  "VEHICLE THEFT": filter_cat(df, "VEHICLE THEFT"),
+                  "OTHER PROPERTY": filter_cat(df, "OTHER PROPERTY"),
+                  "BURGLARY": filter_cat(df, "BURGLARY")}
+    curve_by_hour(main_cats, "seattle_maincat.png", "Main Crimes in Seattle by Time of Day")
+    # SAN FRANCISCO
+    df2 = parse_csv_sanfrancisco(remove_non_criminal=True)
+    # Overview
+    map_neighborhood(df2, "sanfrancisco", "sanfrancisco_overview.png", "Crimes Reported in San Francisco by Neighborhood")
+    cat_pie_display(df2, 6, "sanfrancisco_cat.png", "Crimes in San Francisco by Category")
+    # Day
+    df2_day = filter_day(df2, "sanfrancisco")
+    map_neighborhood(df2_day, "sanfrancisco", "sanfrancisco_day.png", "Day Crimes in San Francisco by Neighborhood")
+    cat_pie_display(df2_day, 6, "sanfrancisco_cat_day.png", "Day Crimes in San Francisco by Category")
+    # Night
+    df2_night = filter_night(df2, "sanfrancisco")
+    map_neighborhood(df2_night, "sanfrancisco", "sanfrancisco_night.png", "Night Crimes in San Francisco by Neighborhood")
+    cat_pie_display(df2_night, 6, "sanfrancisco_cat_night.png", "Night Crimes in San Francisco by Category")
+    # JOIN
+    join_all = {"Seattle": df, "San Franciso": df2}
+    # Overview
+    curve_by_weekday(join_all, "join_all_week.png", "Crimes by Day of the Week")
+    curve_by_hour(join_all, "join_all_hour.png", "Crimes by Time of Day")
+    # Day
+    join_day = {"Seattle": df_day, "San Franciso": df2_day}
+    curve_by_weekday(join_day, "join_day_week.png", "Day Crimes by Day of the Week")
+    # Night
+    join_night = {"Seattle": df_night, "San Franciso": df2_night}
+    curve_by_weekday(join_night, "join_night_week.png", "Night Crimes by Day of the Week")
